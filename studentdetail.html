@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+
+</head>
+<style>
+    /* General Reset and Box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #021526; /* Dark Blue Background */
+    color: #E2E2B6; /* Light Creamy Text */
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #03346E; /* Navy Blue Container */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    text-align: center;
+    color: #6EACDA; /* Light Blue Heading */
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.student-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #6EACDA; /* Light Blue Divider */
+}
+
+.label {
+    font-size: 1.1rem;
+    color: #E2E2B6; /* Light Creamy Text */
+    font-weight: bold;
+}
+
+.data {
+    font-size: 1.1rem;
+    color: #E2E2B6; /* Light Creamy Text */
+}
+
+footer {
+    background-color: #03346E; /* Navy Blue Footer */
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #E2E2B6;
+}
+
+</style>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Details</h1>
+        </header>
+
+        <main>
+            <div class="student-info">
+                <div class="info-item">
+                    <span class="label">Student Name:</span>
+                    <span class="data" id="student-name">John Doe</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">Father's Name:</span>
+                    <span class="data" id="father-name">James Doe</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">College/School Name:</span>
+                    <span class="data" id="school-name">ABC University</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">Degree/Class Name:</span>
+                    <span class="data" id="degree-class">Bachelor of Science</span>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Your Website. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

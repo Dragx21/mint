@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Points Wallet</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #E2E2B6; /* Light Yellow */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #021526; /* Dark Navy Blue */
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #03346E; /* Deep Blue */
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .wallet-container {
+            background-color: #FFFFFF; /* White */
+            border-radius: 10px;
+            padding: 40px 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+            max-width: 100%;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .wallet-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .wallet-container h2 {
+            font-size: 20px;
+            color: #03346E; /* Deep Blue */
+            margin-bottom: 10px;
+        }
+
+        .wallet-container p {
+            font-size: 18px;
+            color: #6EACDA; /* Light Blue */
+        }
+
+        /* Button Styles */
+        button {
+            background-color: #03346E; /* Deep Blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #021526; /* Dark Navy Blue */
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #CCCCCC; /* Light Gray for Disabled */
+            cursor: not-allowed;
+        }
+
+        /* Input Prompt Styles */
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #03346E; /* Deep Blue */
+        }
+
+        /* Address and Balance Styling */
+        .wallet-info {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #F1F1F1; /* Light Gray */
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .wallet-info span {
+            font-weight: bold;
+        }
+
+        .wallet-info .balance {
+            color: #03346E; /* Deep Blue */
+            font-size: 18px;
+        }
+
+        .wallet-info .address {
+            color: #6EACDA; /* Light Blue */
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .wallet-container {
+                padding: 20px 30px;
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="wallet-container">
+        <h1>Credit Points Wallet</h1>
+        
+        <div id="userInfo">
+            <p class="wallet-info">
+                <span>Your Address:</span><br>
+                <span id="userAddress" class="address">Not connected</span>
+            </p>
+            <p class="wallet-info">
+                <span>Your Balance:</span><br>
+                <span id="balance" class="balance">0</span> CP
+            </p>
+        </div>
+
+        <button id="connectButton">Connect Wallet</button>
+        <button id="mintButton" style="display:none;">Mint Points</button>
+        <button id="redeemButton" style="display:none;">Redeem Points</button>
+    </div>
+
+    <script>
+        // Setup Web3.js
+        let web3;
+        let userAccount;
+        let contract;
+        const contractAddress = 'YOUR_CONTRACT_ADDRESS';  // Replace with your contract address
+        const contractABI = [ /* ABI from Remix or Truffle */ ];
+
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+
+                // Request account access if needed
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                // Create contract instance
+                contract = new web3.eth.Contract(contractABI, contractAddress);
+
+                // Get the user's wallet address
+                const accounts = await web3.eth.getAccounts();
+                userAccount = accounts[0];
+                document.getElementById('userAddress').textContent = userAccount;
+
+                // Show the user's balance
+                updateBalance();
+            } else {
+                alert("Please install MetaMask to use this app.");
+            }
+        });
+
+        // Connect Wallet
+        document.getElementById('connectButton').addEventListener('click', async () => {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const accounts = await web3.eth.getAccounts();
+            userAccount = accounts[0];
+            document.getElementById('userAddress').textContent = userAccount;
+            updateBalance();
+        });
+
+        // Mint Points
+        document.getElementById('mintButton').addEventListener('click', async () => {
+            const amount = prompt("Enter the amount of Credit Points to mint:");
+            if (amount) {
+                try {
+                    await contract.methods.mint(userAccount, web3.utils.toWei(amount, "ether")).send({ from: userAccount });
+                    alert(`Minted ${amount} Credit Points!`);
+                    updateBalance();
+                } catch (error) {
+                    console.error(error);
+                    alert("Error minting points.");
+                }
+            }
+        });
+
+        // Redeem Points
+        document.getElementById('redeemButton').addEventListener('click', async () => {
+            const amount = prompt("Enter the amount of Credit Points to redeem:");
+            if (amount) {
+                try {
+                    await contract.methods.redeemPoints(web3.utils.toWei(amount, "ether")).send({ from: userAccount });
+                    alert(`Redeemed ${amount} Credit Points!`);
+                    updateBalance();
+                } catch (error) {
+                    console.error(error);
+                    alert("Error redeeming points.");
+                }
+            }
+        });
+
+        // Update Balance
+        async function updateBalance() {
+            const balance = await contract.methods.balanceOf(userAccount).call();
+            const displayBalance = web3.utils.fromWei(balance, "ether");
+            document.getElementById('balance').textContent = displayBalance;
+
+            // Show the mint/redeem buttons when balance is updated
+            document.getElementById('mintButton').style.display = 'block';
+            document.getElementById('redeemButton').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

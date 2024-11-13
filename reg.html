@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #021526;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 14px;
+            color: #03346e;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #6eacda;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #5a96b6;
+        }
+        .meta-msg {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #808d7c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Student Registration</h1>
+    <form id="registrationForm">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+            <label for="university">University Name</label>
+            <input type="text" id="university" name="university" required placeholder="Enter your university name">
+        </div>
+        <div class="form-group">
+            <label for="school">School Name</label>
+            <input type="text" id="school" name="school" required placeholder="Enter your school name (e.g. Computer Science)">
+        </div>
+        <div class="form-group">
+            <label for="studentId">Student ID</label>
+            <input type="number" id="studentId" name="studentId" required placeholder="Enter your student ID">
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    <p id="walletInfo" class="meta-msg">Please connect your wallet to register.</p>
+</div>
+
+<script>
+    let web3;
+    let userAccount;
+    let contract;
+    const contractAddress = 'YOUR_CONTRACT_ADDRESS'; // Replace with your deployed contract address
+    const contractABI = [ /* ABI from Remix or Truffle */ ];
+
+    window.addEventListener('load', async () => {
+        if (window.ethereum) {
+            web3 = new Web3(window.ethereum);
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+            // Get user account (wallet address)
+            const accounts = await web3.eth.getAccounts();
+            userAccount = accounts[0];
+
+            // Update the wallet info text
+            document.getElementById('walletInfo').textContent = `Connected Wallet Address: ${userAccount}`;
+
+            // Initialize contract
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+        } else {
+            alert('Please install MetaMask to register.');
+        }
+    });
+
+    document.getElementById('registrationForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const university = document.getElementById('university').value;
+        const school = document.getElementById('school').value;
+        const studentId = document.getElementById('studentId').value;
+
+        if (!name || !email || !university || !school || !studentId) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Store data on the blockchain (e.g., saving registration details)
+        try {
+            const tx = await contract.methods.registerStudent(
+                name,
+                email,
+                university,
+                school,
+                studentId,
+                userAccount
+            ).send({ from: userAccount });
+
+            alert('Registration Successful!');
+
+            // Optionally, you can also store the registration details in a backend database for further use
+            // For example, save the student details in a database via an API call.
+
+        } catch (error) {
+            console.error(error);
+            alert('Error registering. Please try again.');
+        }
+    });
+</script>
+
+</body>
+</html>

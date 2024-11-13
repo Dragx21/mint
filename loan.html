@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Loan Application</title>
+   
+</head>
+<style>
+    /* General Reset and Box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #021526; /* Dark Blue Background */
+    color: #E2E2B6; /* Light Creamy Text */
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #03346E; /* Navy Blue Container */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    text-align: center;
+    color: #6EACDA; /* Light Blue Heading */
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.loan-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #E2E2B6; /* Light Creamy Text */
+}
+
+select,
+input {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #6EACDA;
+    border-radius: 5px;
+    background-color: #021526;
+    color: #E2E2B6;
+}
+
+select:focus,
+input:focus {
+    outline: none;
+    border-color: #03346E; /* Focus color */
+}
+
+.submit-btn {
+    padding: 12px;
+    background-color: #6EACDA; /* Light Blue Button Color */
+    color: #021526; /* Dark Blue Text */
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #E2E2B6; /* Hover effect with Creamy Color */
+    color: #021526; /* Dark Blue Text on Hover */
+    transform: translateY(-3px); /* Slight lift on hover */
+}
+
+.submit-btn:active {
+    transform: translateY(1px); /* Slight press down on click */
+}
+
+footer {
+    background-color: #03346E; /* Navy Blue Footer */
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #E2E2B6;
+}
+
+</style>
+<body>
+    <div class="container">
+        <header>
+            <h1>Easy Loan Application</h1>
+        </header>
+
+        <main>
+            <form class="loan-form">
+                <div class="form-group">
+                    <label for="bank-name">Bank Name:</label>
+                    <select id="bank-name" name="bank-name" required>
+                        <option value="" disabled selected>Select Bank</option>
+                        <option value="sbi">SBI Bank</option>
+                        <option value="hdfc">HDFC</option>
+                        <option value="icici">ICICI</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="account-number">Account Number:</label>
+                    <input type="text" id="account-number" name="account-number" placeholder="Enter Account Number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loan-amount">Amount of Loan:</label>
+                    <input type="number" id="loan-amount" name="loan-amount" placeholder="Enter Loan Amount" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loan-duration">Duration (in months):</label>
+                    <input type="number" id="loan-duration" name="loan-duration" placeholder="Enter Loan Duration" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Application</button>
+            </form>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Your Website. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
